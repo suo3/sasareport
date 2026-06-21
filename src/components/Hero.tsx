@@ -1,5 +1,5 @@
 import React from 'react';
-import { Code, Globe } from 'lucide-react';
+import { Code, Globe, Share2 } from 'lucide-react';
 import './Hero.css';
 
 export const Hero: React.FC = () => {
@@ -20,18 +20,23 @@ export const Hero: React.FC = () => {
           </p>
 
           <div className="hero-actions">
-            <a href="#" className="btn btn-primary">
+            {/* <a  href="#" className="btn btn-primary">
               Download CV
-            </a>
-          </div>
-
-          <div className="hero-socials">
-            <a href="#" aria-label="LinkedIn" className="social-icon">
-              <Globe size={20} />
-            </a>
-            <a href="#" aria-label="GitHub" className="social-icon">
-              <Code size={20} />
-            </a>
+            </a> */}
+            <div className="hero-social-links mono">
+              <a href="#" className="hero-social-btn">
+                <Code size={18} />
+                <span>GITHUB</span>
+              </a>
+              <a href="#" className="hero-social-btn">
+                <Globe size={18} />
+                <span>LINKEDIN</span>
+              </a>
+              <a href="#" className="hero-social-btn">
+                <Share2 size={18} />
+                <span>X / TWITTER</span>
+              </a>
+            </div>
           </div>
         </div>
 

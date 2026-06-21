@@ -44,28 +44,37 @@
 }
 
 .hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
   margin-bottom: 2.5rem;
 }
 
-.hero-socials {
+.hero-social-links {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
-.social-icon {
+.hero-social-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background-color: transparent;
-  color: var(--text-primary);
-  transition: background-color 0.2s ease;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
-.social-icon:hover {
-  background-color: var(--bg-card);
+.hero-social-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .hero-image-wrapper {

@@ -88,20 +88,7 @@ export const Contact: React.FC = () => {
           </form>
         </div>
         
-        <div className="social-links mono">
-          <a href="#" className="social-btn">
-            <Code size={20} />
-            <span>GITHUB</span>
-          </a>
-          <a href="#" className="social-btn">
-            <Globe size={20} />
-            <span>LINKEDIN</span>
-          </a>
-          <a href="#" className="social-btn">
-            <Share2 size={20} />
-            <span>X / TWITTER</span>
-          </a>
-        </div>
+
       </div>
     </section>
   );
