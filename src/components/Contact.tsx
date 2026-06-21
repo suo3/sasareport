@@ -43,7 +43,7 @@ export const Contact: React.FC = () => {
           
           <h2 className="section-title">Let's Talk</h2>
           <div className="section-subtitle" style={{ maxWidth: '600px', margin: '0 auto 3rem auto', textTransform: 'none', color: 'var(--text-secondary)' }}>
-            I am actively seeking projects that challenge the boundaries of distributed systems and high-scale performance. If you have a mission-critical system to build, let's open a connection.
+            I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. Whether you need a sleek new UI design or a robust web application, let's connect and build something great together.
           </div>
         </div>
 

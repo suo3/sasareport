@@ -45,18 +45,18 @@ export const Hero: React.FC = () => {
               Download CV
             </a> */}
             <div className="hero-social-links mono">
-              <a href="#" className="hero-social-btn">
+              <a href="https://github.com/suo3" className="hero-social-btn">
                 <Code size={18} />
                 <span>GITHUB</span>
               </a>
-              <a href="#" className="hero-social-btn">
+              {/*  <a href="#" className="hero-social-btn">
                 <Globe size={18} />
                 <span>LINKEDIN</span>
-              </a>
-              <a href="#" className="hero-social-btn">
+              </a> */}
+              {/*  <a href="#" className="hero-social-btn">
                 <Share2 size={18} />
                 <span>X / TWITTER</span>
-              </a>
+              </a> */}
             </div>
           </div>
         </div>
