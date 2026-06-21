@@ -150,6 +150,7 @@ const ProjectsManager: React.FC = () => {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '', description: '', image_url: '', year: new Date().getFullYear().toString(),
     status: 'ACTIVE', tags: '', demo_url: '', source_url: ''
@@ -173,7 +174,7 @@ const ProjectsManager: React.FC = () => {
     e.preventDefault();
     const tagsArray = formData.tags.split(',').map(t => t.trim()).filter(Boolean);
     
-    await supabase.from('sasareport_projects').insert([{
+    const projectData = {
       title: formData.title,
       description: formData.description,
       image_url: formData.image_url || null,
@@ -182,11 +183,33 @@ const ProjectsManager: React.FC = () => {
       tags: tagsArray,
       demo_url: formData.demo_url || null,
       source_url: formData.source_url || null
-    }]);
+    };
+
+    if (editingId) {
+      await supabase.from('sasareport_projects').update(projectData).eq('id', editingId);
+    } else {
+      await supabase.from('sasareport_projects').insert([projectData]);
+    }
     
     setShowForm(false);
+    setEditingId(null);
     setFormData({ title: '', description: '', image_url: '', year: new Date().getFullYear().toString(), status: 'ACTIVE', tags: '', demo_url: '', source_url: '' });
     fetchProjects();
+  };
+
+  const handleEdit = (project: any) => {
+    setFormData({
+      title: project.title,
+      description: project.description,
+      image_url: project.image_url || '',
+      year: project.year,
+      status: project.status,
+      tags: project.tags?.join(', ') || '',
+      demo_url: project.demo_url || '',
+      source_url: project.source_url || ''
+    });
+    setEditingId(project.id);
+    setShowForm(true);
   };
 
   const seedProjects = async () => {
@@ -208,7 +231,15 @@ const ProjectsManager: React.FC = () => {
           <button onClick={seedProjects} className="btn btn-secondary" style={{ padding: '0.5rem 1rem' }}>
             Auto-Add Projects
           </button>
-          <button onClick={() => setShowForm(!showForm)} className="btn btn-primary" style={{ padding: '0.5rem 1rem' }}>
+          <button onClick={() => {
+            if (showForm) {
+              setShowForm(false);
+              setEditingId(null);
+              setFormData({ title: '', description: '', image_url: '', year: new Date().getFullYear().toString(), status: 'ACTIVE', tags: '', demo_url: '', source_url: '' });
+            } else {
+              setShowForm(true);
+            }
+          }} className="btn btn-primary" style={{ padding: '0.5rem 1rem' }}>
             {showForm ? 'Cancel' : '+ Add Project'}
           </button>
         </div>
@@ -232,7 +263,9 @@ const ProjectsManager: React.FC = () => {
             <input placeholder="Demo URL (optional)" value={formData.demo_url} onChange={e => setFormData({...formData, demo_url: e.target.value})} className="terminal-input" />
             <input placeholder="Source URL (optional)" value={formData.source_url} onChange={e => setFormData({...formData, source_url: e.target.value})} className="terminal-input" />
           </div>
-          <button type="submit" className="btn btn-primary" style={{ justifySelf: 'start' }}>Save Project</button>
+          <button type="submit" className="btn btn-primary" style={{ justifySelf: 'start' }}>
+            {editingId ? 'Update Project' : 'Save Project'}
+          </button>
         </form>
       )}
 
@@ -244,9 +277,14 @@ const ProjectsManager: React.FC = () => {
                 <h3 style={{ fontSize: '1.1rem', marginBottom: '0.25rem' }}>{p.title} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>({p.year})</span></h3>
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Status: {p.status} | Tags: {p.tags?.join(', ')}</div>
               </div>
-              <button onClick={() => handleDelete(p.id)} style={{ background: '#ff444422', color: '#ff4444', border: '1px solid #ff444444', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
-                Delete
-              </button>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button onClick={() => handleEdit(p)} style={{ background: '#44ffaa22', color: '#00ffcc', border: '1px solid #00ffcc44', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                  Edit
+                </button>
+                <button onClick={() => handleDelete(p.id)} style={{ background: '#ff444422', color: '#ff4444', border: '1px solid #ff444444', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>

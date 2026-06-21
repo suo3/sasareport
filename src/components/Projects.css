@@ -45,8 +45,8 @@
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
 }
 
 .project-card {
@@ -57,7 +57,7 @@
 }
 
 .project-image-container {
-  height: 200px;
+  height: 150px;
   position: relative;
   border-bottom: 1px solid var(--border-color);
   background-color: #050810;
@@ -110,7 +110,7 @@
 .status-badge.draft { color: var(--text-muted); }
 
 .project-content {
-  padding: 1.5rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
