@@ -51,7 +51,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ session }) => {
       <main style={{ flex: 1, padding: '3rem', overflowY: 'auto' }}>
         <Routes>
           <Route path="/" element={<SettingsView />} />
-          <Route path="/projects" element={<div className="glass-card" style={{padding:'2rem'}}><h2>Projects Manager</h2><p>Coming soon...</p></div>} />
+          <Route path="/projects" element={<ProjectsManager />} />
           <Route path="/skills" element={<div className="glass-card" style={{padding:'2rem'}}><h2>Skills Manager</h2><p>Coming soon...</p></div>} />
           <Route path="/messages" element={<div className="glass-card" style={{padding:'2rem'}}><h2>Messages Inbox</h2><p>Coming soon...</p></div>} />
         </Routes>
@@ -142,6 +142,99 @@ const SettingsView: React.FC = () => {
           {saving ? 'SAVING...' : 'SAVE SETTINGS'}
         </button>
       </form>
+    </div>
+  );
+};
+
+const ProjectsManager: React.FC = () => {
+  const [projects, setProjects] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '', description: '', image_url: '', year: new Date().getFullYear().toString(),
+    status: 'ACTIVE', tags: '', demo_url: '', source_url: ''
+  });
+
+  useEffect(() => { fetchProjects(); }, []);
+
+  const fetchProjects = async () => {
+    const { data } = await supabase.from('sasareport_projects').select('*').order('year', { ascending: false });
+    if (data) setProjects(data);
+    setLoading(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this project?')) return;
+    await supabase.from('sasareport_projects').delete().eq('id', id);
+    fetchProjects();
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const tagsArray = formData.tags.split(',').map(t => t.trim()).filter(Boolean);
+    
+    await supabase.from('sasareport_projects').insert([{
+      title: formData.title,
+      description: formData.description,
+      image_url: formData.image_url || null,
+      year: formData.year,
+      status: formData.status,
+      tags: tagsArray,
+      demo_url: formData.demo_url || null,
+      source_url: formData.source_url || null
+    }]);
+    
+    setShowForm(false);
+    setFormData({ title: '', description: '', image_url: '', year: new Date().getFullYear().toString(), status: 'ACTIVE', tags: '', demo_url: '', source_url: '' });
+    fetchProjects();
+  };
+
+  return (
+    <div className="glass-card" style={{ padding: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <h2>Projects Manager</h2>
+        <button onClick={() => setShowForm(!showForm)} className="btn btn-primary" style={{ padding: '0.5rem 1rem' }}>
+          {showForm ? 'Cancel' : '+ Add Project'}
+        </button>
+      </div>
+
+      {showForm && (
+        <form onSubmit={handleSave} style={{ display: 'grid', gap: '1rem', marginBottom: '3rem', background: 'rgba(0,0,0,0.2)', padding: '1.5rem', borderRadius: '8px' }}>
+          <input placeholder="Title" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} required className="terminal-input" />
+          <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} required className="terminal-input" rows={3} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <input placeholder="Year" value={formData.year} onChange={e => setFormData({...formData, year: e.target.value})} required className="terminal-input" />
+            <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value})} className="terminal-input">
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="BETA">BETA</option>
+              <option value="COMPLETED">COMPLETED</option>
+            </select>
+          </div>
+          <input placeholder="Tags (comma separated, e.g. React, Node.js)" value={formData.tags} onChange={e => setFormData({...formData, tags: e.target.value})} required className="terminal-input" />
+          <input placeholder="Image URL (optional)" value={formData.image_url} onChange={e => setFormData({...formData, image_url: e.target.value})} className="terminal-input" />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <input placeholder="Demo URL (optional)" value={formData.demo_url} onChange={e => setFormData({...formData, demo_url: e.target.value})} className="terminal-input" />
+            <input placeholder="Source URL (optional)" value={formData.source_url} onChange={e => setFormData({...formData, source_url: e.target.value})} className="terminal-input" />
+          </div>
+          <button type="submit" className="btn btn-primary" style={{ justifySelf: 'start' }}>Save Project</button>
+        </form>
+      )}
+
+      {loading ? <p>Loading projects...</p> : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {projects.map(p => (
+            <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+              <div>
+                <h3 style={{ fontSize: '1.1rem', marginBottom: '0.25rem' }}>{p.title} <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>({p.year})</span></h3>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Status: {p.status} | Tags: {p.tags?.join(', ')}</div>
+              </div>
+              <button onClick={() => handleDelete(p.id)} style={{ background: '#ff444422', color: '#ff4444', border: '1px solid #ff444444', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
+                Delete
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
