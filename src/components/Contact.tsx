@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { AtSign, Code, Globe, Share2, Check } from 'lucide-react';
+import { AtSign, Check } from 'lucide-react';
 import './Contact.css';
 
 export const Contact: React.FC = () => {
