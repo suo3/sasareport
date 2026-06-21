@@ -150,6 +150,7 @@ const ProjectsManager: React.FC = () => {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '', description: '', image_url: '', year: new Date().getFullYear().toString(),
@@ -212,6 +213,28 @@ const ProjectsManager: React.FC = () => {
     setShowForm(true);
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      if (!e.target.files || e.target.files.length === 0) return;
+      
+      setUploadingImage(true);
+      const file = e.target.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage.from('project-images').upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from('project-images').getPublicUrl(fileName);
+      setFormData(prev => ({ ...prev, image_url: data.publicUrl }));
+    } catch (error: any) {
+      alert('Error uploading image: ' + error.message);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   const seedProjects = async () => {
     const projectsToSeed = [
       { title: 'DriveGhana', description: 'Web application for DriveGhana.', year: '2026', status: 'ACTIVE', tags: ['Web'], demo_url: 'https://driveghana.com' },
@@ -258,7 +281,13 @@ const ProjectsManager: React.FC = () => {
             </select>
           </div>
           <input placeholder="Tags (comma separated, e.g. React, Node.js)" value={formData.tags} onChange={e => setFormData({...formData, tags: e.target.value})} required className="terminal-input" />
-          <input placeholder="Image URL (optional)" value={formData.image_url} onChange={e => setFormData({...formData, image_url: e.target.value})} className="terminal-input" />
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <input placeholder="Image URL (optional)" value={formData.image_url} onChange={e => setFormData({...formData, image_url: e.target.value})} className="terminal-input" style={{ flex: 1 }} />
+            <label className="btn btn-secondary" style={{ cursor: 'pointer', whiteSpace: 'nowrap', height: '100%' }}>
+              {uploadingImage ? 'Uploading...' : 'Upload Image'}
+              <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage} style={{ display: 'none' }} />
+            </label>
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <input placeholder="Demo URL (optional)" value={formData.demo_url} onChange={e => setFormData({...formData, demo_url: e.target.value})} className="terminal-input" />
             <input placeholder="Source URL (optional)" value={formData.source_url} onChange={e => setFormData({...formData, source_url: e.target.value})} className="terminal-input" />
