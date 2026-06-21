@@ -5,8 +5,8 @@ import './Hero.css';
 
 export const Hero: React.FC = () => {
   const [settings, setSettings] = useState({
-    hero_intro: 'I am Samuel',
-    hero_title: 'Software Developer <br /> & UI/UX Designer',
+    hero_intro: 'Hello, I am Samuel',
+    hero_title: 'Software Developer <br /> & Designer',
     hero_description: 'Blending thoughtful UI design with clean, responsive development to create scalable digital platforms that look great and perform flawlessly.'
   });
 

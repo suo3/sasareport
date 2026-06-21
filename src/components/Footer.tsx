@@ -16,11 +16,11 @@ export const Footer: React.FC = () => {
         gap: '1rem'
       }}>
         <div className="brand-text" style={{ fontSize: '1rem', opacity: 0.8 }}>SOA</div>
-        
+
         <div className="mono" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
-          © {new Date().getFullYear()} SYSTEM_ARCHITECT. ALL RIGHTS RESERVED.
+          © {new Date().getFullYear()} SOA. ALL RIGHTS RESERVED.
         </div>
-        
+
 
       </div>
     </footer>
