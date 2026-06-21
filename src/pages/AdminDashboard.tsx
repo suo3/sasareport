@@ -189,13 +189,29 @@ const ProjectsManager: React.FC = () => {
     fetchProjects();
   };
 
+  const seedProjects = async () => {
+    const projectsToSeed = [
+      { title: 'DriveGhana', description: 'Web application for DriveGhana.', year: '2026', status: 'ACTIVE', tags: ['Web'], demo_url: 'https://driveghana.com' },
+      { title: 'KenteKart', description: 'Web platform for KenteKart.', year: '2026', status: 'ACTIVE', tags: ['Web'], demo_url: 'https://kentekart.com' },
+      { title: '233Logistics', description: 'Web platform for 233Logistics.', year: '2026', status: 'ACTIVE', tags: ['Web'], demo_url: 'https://233logistics.com' },
+      { title: 'AkaNexus', description: 'Web platform for AkaNexus.', year: '2026', status: 'ACTIVE', tags: ['Web'], demo_url: 'https://akanexus.com' }
+    ];
+    await Promise.all(projectsToSeed.map(p => supabase.from('sasareport_projects').insert([p])));
+    fetchProjects();
+  };
+
   return (
     <div className="glass-card" style={{ padding: '2rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h2>Projects Manager</h2>
-        <button onClick={() => setShowForm(!showForm)} className="btn btn-primary" style={{ padding: '0.5rem 1rem' }}>
-          {showForm ? 'Cancel' : '+ Add Project'}
-        </button>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button onClick={seedProjects} className="btn btn-secondary" style={{ padding: '0.5rem 1rem' }}>
+            Auto-Add Projects
+          </button>
+          <button onClick={() => setShowForm(!showForm)} className="btn btn-primary" style={{ padding: '0.5rem 1rem' }}>
+            {showForm ? 'Cancel' : '+ Add Project'}
+          </button>
+        </div>
       </div>
 
       {showForm && (
