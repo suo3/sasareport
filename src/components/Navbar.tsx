@@ -5,26 +5,26 @@ export const Navbar: React.FC = () => {
   return (
     <nav className="navbar">
       <div className="container nav-container">
-        
+
         {/* Logo left */}
         <div className="nav-brand">
           <div className="brand-logo">
-            <span className="brand-initials">vm</span>
+            <span className="brand-initials">SOA</span>
           </div>
         </div>
-        
+
         {/* Center Pill Navigation */}
         <div className="nav-pill">
           <a href="#home" className="nav-link active">Home</a>
           <a href="#projects" className="nav-link">Projects</a>
           <a href="#stack" className="nav-link">Stack</a>
         </div>
-        
+
         {/* CTA Right */}
         <div className="nav-cta">
           <a href="#contact" className="btn btn-secondary nav-btn">Let's Talk</a>
         </div>
-        
+
       </div>
     </nav>
   );
