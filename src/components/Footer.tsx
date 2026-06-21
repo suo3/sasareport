@@ -1,0 +1,32 @@
+import React from 'react';
+
+export const Footer: React.FC = () => {
+  return (
+    <footer style={{
+      borderTop: '1px solid var(--border-color)',
+      padding: '2rem 0',
+      marginTop: '4rem',
+      backgroundColor: 'var(--bg-primary)'
+    }}>
+      <div className="container" style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '1rem'
+      }}>
+        <div className="brand-text" style={{ fontSize: '1rem', opacity: 0.8 }}>ENGINEER_CORE</div>
+        
+        <div className="mono" style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>
+          © {new Date().getFullYear()} SYSTEM_ARCHITECT. ALL RIGHTS RESERVED.
+        </div>
+        
+        <div className="mono" style={{ display: 'flex', gap: '1rem', fontSize: '0.65rem' }}>
+          <a href="#" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Source Code</a>
+          <a href="#" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Security</a>
+          <a href="#" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Architecture</a>
+        </div>
+      </div>
+    </footer>
+  );
+};
