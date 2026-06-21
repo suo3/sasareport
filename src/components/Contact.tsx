@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { AtSign, Code, Globe, Share2 } from 'lucide-react';
+import { AtSign, Code, Globe, Share2, Check } from 'lucide-react';
 import './Contact.css';
 
 export const Contact: React.FC = () => {
@@ -47,45 +47,58 @@ export const Contact: React.FC = () => {
           </div>
         </div>
 
-        <div className="contact-terminal glass-card">
-          <form onSubmit={handleSubmit} className="terminal-form mono">
-            <div className="form-header">
-              <span className="prompt">DIRECT TERMINAL:</span>
+        <div className="contact-form-wrapper glass-card">
+          {status === 'SUCCESS' ? (
+            <div className="success-state text-center" style={{ padding: '3rem 1rem' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(0, 255, 204, 0.1)', color: 'var(--accent)', marginBottom: '1.5rem' }}>
+                <Check size={32} />
+              </div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Message Received</h3>
+              <p style={{ color: 'var(--text-secondary)' }}>Thank you for reaching out. I'll get back to you shortly.</p>
+              <button onClick={() => setStatus('IDLE')} className="btn btn-secondary" style={{ marginTop: '2rem' }}>Send Another</button>
             </div>
-            
-            <div className="form-group">
-              <span className="prompt">$</span>
-              <input 
-                type="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@engineer.core.io" 
-                className="terminal-input"
-                required
-                disabled={status === 'SENDING'}
-              />
-              <AtSign size={18} className="input-icon" />
-            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="modern-form">
+              <div className="form-group-modern">
+                <label>Email Address</label>
+                <div className="input-wrapper">
+                  <AtSign size={18} className="input-icon-modern" />
+                  <input 
+                    type="email" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@domain.com" 
+                    className="modern-input"
+                    required
+                    disabled={status === 'SENDING'}
+                  />
+                </div>
+              </div>
 
-            <div className="form-group msg-group">
-              <span className="prompt">$</span>
-              <textarea 
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Initialize message payload..." 
-                className="terminal-input"
-                rows={4}
-                required
-                disabled={status === 'SENDING'}
-              ></textarea>
-            </div>
-            
-            <div className="form-actions">
-              <button type="submit" className="btn btn-primary" disabled={status === 'SENDING'}>
-                {status === 'SENDING' ? 'TRANSMITTING...' : status === 'SUCCESS' ? 'PAYLOAD DELIVERED' : status === 'ERROR' ? 'TRANSMISSION FAILED' : 'EXECUTE SEND'}
+              <div className="form-group-modern">
+                <label>Message</label>
+                <div className="input-wrapper align-top">
+                  <textarea 
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="How can we collaborate?" 
+                    className="modern-input"
+                    rows={5}
+                    required
+                    disabled={status === 'SENDING'}
+                  ></textarea>
+                </div>
+              </div>
+              
+              <button type="submit" className="btn btn-primary w-full" disabled={status === 'SENDING'}>
+                {status === 'SENDING' ? 'Sending...' : 'Send Message'}
               </button>
-            </div>
-          </form>
+              
+              {status === 'ERROR' && (
+                <div style={{ marginTop: '1rem', color: '#ff4444', textAlign: 'center', fontSize: '0.85rem' }}>Failed to send. Please try again.</div>
+              )}
+            </form>
+          )}
         </div>
         
 

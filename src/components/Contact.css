@@ -2,84 +2,72 @@
   position: relative;
 }
 
-.contact-terminal {
+.contact-form-wrapper {
   max-width: 600px;
   margin: 0 auto 4rem auto;
-  background: #050810;
+  padding: 2.5rem;
 }
 
-.terminal-form {
-  padding: 2rem;
+.modern-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.form-header {
-  margin-bottom: 2rem;
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
+.form-group-modern label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
-.form-group {
+.input-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  padding-bottom: 0.5rem;
-  margin-bottom: 1.5rem;
-  position: relative;
 }
 
-.msg-group {
+.input-wrapper.align-top {
   align-items: flex-start;
 }
 
-.terminal-input {
-  background: transparent;
-  border: none;
-  color: var(--text-primary);
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
+.input-icon-modern {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-muted);
+}
+
+.modern-input {
   width: 100%;
-  outline: none;
-  resize: none;
-}
-
-.terminal-input::placeholder {
-  color: rgba(255,255,255,0.2);
-}
-
-.input-icon {
-  color: var(--text-muted);
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 2rem;
-}
-
-.social-links {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.social-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: 0.65rem;
-  transition: all 0.2s ease;
-  padding: 1rem;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
-
-.social-btn:hover {
+  padding: 0.875rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
   color: var(--text-primary);
-  background: var(--bg-card);
-  border-color: var(--border-color);
-  transform: translateY(-2px);
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  outline: none;
+  font-family: inherit;
+}
+
+input.modern-input {
+  padding-left: 2.75rem;
+}
+
+.modern-input:focus {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.05);
+}
+
+.modern-input::placeholder {
+  color: var(--text-muted);
+}
+
+.w-full {
+  width: 100%;
+  justify-content: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }

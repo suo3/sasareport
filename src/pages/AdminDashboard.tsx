@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import type { Session } from '@supabase/supabase-js';
-import { Settings, FolderGit2, Wrench, MessageSquare, LogOut } from 'lucide-react';
+import { Settings, FolderGit2, Wrench, MessageSquare, LogOut, Mail, Trash2 } from 'lucide-react';
 import { Routes, Route, NavLink, useNavigate } from 'react-router-dom';
 
 interface AdminDashboardProps {
@@ -331,15 +331,22 @@ const MessagesManager: React.FC = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {messages.length === 0 && <p style={{ color: 'var(--text-secondary)' }}>No messages yet.</p>}
           {messages.map(m => (
-            <div key={m.id} style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <strong style={{ color: 'var(--text-primary)' }}>{m.email}</strong>
-                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{new Date(m.created_at).toLocaleString()}</span>
-                  <button onClick={() => handleDelete(m.id)} style={{ color: '#ff4444', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}>&times;</button>
+            <div key={m.id} style={{ display: 'flex', gap: '1.5rem', padding: '1.5rem', background: 'var(--bg-card)', borderRadius: '12px', border: '1px solid var(--border-color)', position: 'relative' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Mail size={20} color="var(--text-muted)" />
+              </div>
+              <div style={{ flex: 1, paddingRight: '2rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                  <h4 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--text-primary)' }}>{m.email}</h4>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{new Date(m.created_at).toLocaleString()}</span>
+                </div>
+                <div style={{ padding: '1.25rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)', color: 'var(--text-secondary)', whiteSpace: 'pre-wrap', fontSize: '0.95rem', lineHeight: '1.6' }}>
+                  {m.message}
                 </div>
               </div>
-              <p style={{ color: 'var(--text-secondary)', whiteSpace: 'pre-wrap' }}>{m.message}</p>
+              <button onClick={() => handleDelete(m.id)} title="Delete Message" style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,68,68,0.1)', color: '#ff4444', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
+                <Trash2 size={16} />
+              </button>
             </div>
           ))}
         </div>
