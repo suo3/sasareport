@@ -52,8 +52,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ session }) => {
         <Routes>
           <Route path="/" element={<SettingsView />} />
           <Route path="/projects" element={<ProjectsManager />} />
-          <Route path="/skills" element={<div className="glass-card" style={{padding:'2rem'}}><h2>Skills Manager</h2><p>Coming soon...</p></div>} />
-          <Route path="/messages" element={<div className="glass-card" style={{padding:'2rem'}}><h2>Messages Inbox</h2><p>Coming soon...</p></div>} />
+          <Route path="/skills" element={<SkillsManager />} />
+          <Route path="/messages" element={<MessagesManager />} />
         </Routes>
       </main>
     </div>
@@ -231,6 +231,115 @@ const ProjectsManager: React.FC = () => {
               <button onClick={() => handleDelete(p.id)} style={{ background: '#ff444422', color: '#ff4444', border: '1px solid #ff444444', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}>
                 Delete
               </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const SkillsManager: React.FC = () => {
+  const [skills, setSkills] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({ category: 'LANGUAGES', name: '', proficiency_level: 'ADVANCED', color: '#00ffcc' });
+
+  useEffect(() => { fetchSkills(); }, []);
+
+  const fetchSkills = async () => {
+    const { data } = await supabase.from('sasareport_skills').select('*').order('category');
+    if (data) setSkills(data);
+    setLoading(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this skill?')) return;
+    await supabase.from('sasareport_skills').delete().eq('id', id);
+    fetchSkills();
+  };
+
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await supabase.from('sasareport_skills').insert([formData]);
+    setShowForm(false);
+    setFormData({ category: 'LANGUAGES', name: '', proficiency_level: 'ADVANCED', color: '#00ffcc' });
+    fetchSkills();
+  };
+
+  return (
+    <div className="glass-card" style={{ padding: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <h2>Skills Manager</h2>
+        <button onClick={() => setShowForm(!showForm)} className="btn btn-primary" style={{ padding: '0.5rem 1rem' }}>
+          {showForm ? 'Cancel' : '+ Add Skill'}
+        </button>
+      </div>
+
+      {showForm && (
+        <form onSubmit={handleSave} style={{ display: 'grid', gap: '1rem', marginBottom: '3rem', background: 'rgba(0,0,0,0.2)', padding: '1.5rem', borderRadius: '8px' }}>
+          <select value={formData.category} onChange={e => setFormData({...formData, category: e.target.value})} className="terminal-input" required>
+            <option value="LANGUAGES">LANGUAGES</option>
+            <option value="FRONTEND">FRONTEND</option>
+            <option value="INFRASTRUCTURE">INFRASTRUCTURE</option>
+            <option value="STORAGE">STORAGE</option>
+          </select>
+          <input placeholder="Skill Name (e.g. React, Python)" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required className="terminal-input" />
+          <button type="submit" className="btn btn-primary" style={{ justifySelf: 'start' }}>Save Skill</button>
+        </form>
+      )}
+
+      {loading ? <p>Loading skills...</p> : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+          {skills.map(s => (
+            <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+              <div>
+                <h3 style={{ fontSize: '1rem', marginBottom: '0.25rem' }}>{s.name}</h3>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{s.category}</div>
+              </div>
+              <button onClick={() => handleDelete(s.id)} style={{ color: '#ff4444', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}>&times;</button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const MessagesManager: React.FC = () => {
+  const [messages, setMessages] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { fetchMessages(); }, []);
+
+  const fetchMessages = async () => {
+    const { data } = await supabase.from('sasareport_messages').select('*').order('created_at', { ascending: false });
+    if (data) setMessages(data);
+    setLoading(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this message?')) return;
+    await supabase.from('sasareport_messages').delete().eq('id', id);
+    fetchMessages();
+  };
+
+  return (
+    <div className="glass-card" style={{ padding: '2rem' }}>
+      <h2 style={{ marginBottom: '2rem' }}>Messages Inbox</h2>
+      {loading ? <p>Loading messages...</p> : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {messages.length === 0 && <p style={{ color: 'var(--text-secondary)' }}>No messages yet.</p>}
+          {messages.map(m => (
+            <div key={m.id} style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.03)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <strong style={{ color: 'var(--text-primary)' }}>{m.email}</strong>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{new Date(m.created_at).toLocaleString()}</span>
+                  <button onClick={() => handleDelete(m.id)} style={{ color: '#ff4444', background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}>&times;</button>
+                </div>
+              </div>
+              <p style={{ color: 'var(--text-secondary)', whiteSpace: 'pre-wrap' }}>{m.message}</p>
             </div>
           ))}
         </div>
