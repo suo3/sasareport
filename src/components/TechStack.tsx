@@ -59,7 +59,7 @@ export const TechStack: React.FC = () => {
     <section id="stack" className="tech-stack section-padding">
       <div className="container">
         <div className="section-header text-center">
-          <h2 className="section-title">Skills</h2>
+          <h2 className="section-title">Tech Stack</h2>
           <div className="section-subtitle">
             Crafting seamless UI/UX and clean code.
           </div>
