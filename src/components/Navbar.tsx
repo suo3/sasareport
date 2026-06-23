@@ -8,9 +8,9 @@ export const Navbar: React.FC = () => {
 
         {/* Logo left */}
         <div className="nav-brand">
-          <div className="brand-logo">
+          <a href="#home" className="brand-logo" style={{ textDecoration: 'none' }}>
             <span className="brand-initials">SOA</span>
-          </div>
+          </a>
         </div>
 
         {/* Center Pill Navigation */}

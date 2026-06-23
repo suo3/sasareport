@@ -37,8 +37,8 @@ export const Contact: React.FC = () => {
     <section id="contact" className="contact section-padding">
       <div className="container">
         <div className="section-header text-center">
-          <div className="status-badge active mono" style={{ position: 'relative', display: 'inline-block', top: '0', right: '0', marginBottom: '2rem' }}>
-            <span className="status-dot"></span> CURRENTLY AVAILABLE FOR COLLABORATION
+          <div className="status-badge active mono" style={{ position: 'relative', display: 'inline-flex', top: '0', right: '0', marginBottom: '2rem', color: 'var(--accent-cyan)' }}>
+            CURRENTLY AVAILABLE FOR COLLABORATION
           </div>
           
           <h2 className="section-title">Let's Talk</h2>
